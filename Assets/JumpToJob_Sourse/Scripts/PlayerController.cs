@@ -17,7 +17,9 @@ public class PlayerController : MonoBehaviour
 
     private float startPosition = 1;
     private float walkSpeed = 3.5f;
-    public float gameSpeed = 30.0f;
+    public float gameSpeed;
+
+    private float scoreForIncreasSpeed = 1000;
 
     private float score;
     public TextMeshProUGUI scoreText;
@@ -32,6 +34,8 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         gameManager = GameObject.Find("Game Manager").GetComponent<GameManager>();
+
+        gameSpeed = 20.0f;
 
         score = 0;
         scoreText.text = "Score: " + score;
@@ -59,11 +63,14 @@ public class PlayerController : MonoBehaviour
             score += gameSpeed * Time.deltaTime * dashMode;
             score = Mathf.Ceil(score);
             scoreText.text = "Score: " + score;
+
+            IncreaseSpeed();
         }
 
         PlayerJump();
 
         DashMode();
+
     }
 
     private void PlayerJump()
@@ -93,6 +100,15 @@ public class PlayerController : MonoBehaviour
         }
     }
    
+    private void IncreaseSpeed()
+    {
+        if (score > scoreForIncreasSpeed)
+        {
+            gameSpeed++;
+            scoreForIncreasSpeed += scoreForIncreasSpeed;
+        }
+         
+    }
 
     private void OnCollisionEnter(Collision collision)
     {
